@@ -47,11 +47,15 @@
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item mx-1">
-                        <a
-                            class="nav-link"
-                            href="/login">
-                            <i class="fas fa-power-off"></i> Sair
-                        </a>
+                            <button type="submit"
+                                class="nav-link"
+                                onclick="event.preventDefault();
+                                        document.getElementById('logout-form').submit();">
+                                <i class="fas fa-power-off"></i> Sair
+                            </a>
+                            <form id="logout-form" action="{{route('logout')}}" method="POST" class="hidden">
+                            {{ csrf_field() }}
+                            </form>
                       </li>
                     </ul>
               </div>

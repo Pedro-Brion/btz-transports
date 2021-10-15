@@ -6,6 +6,8 @@ use App\Models\Driver;
 use App\Models\Refuel;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class RefuelsController extends Controller
 {
@@ -20,7 +22,7 @@ class RefuelsController extends Controller
 
         $refuels = Refuel::all();
 
-        return view('refuels.index', ['pageTitle' => $pageTitle,'refuels'=>$refuels]);
+        return view('refuels.index', ['pageTitle' => $pageTitle, 'refuels' => $refuels]);
     }
 
     /**
@@ -32,10 +34,10 @@ class RefuelsController extends Controller
     {
         $pageTitle = "Abastecimentos";
 
-        $drivers= Driver::all();
-        $vehicles= Vehicle::all();
-        
-        return view('refuels.create', ['pageTitle' => $pageTitle,'drivers'=>$drivers,'vehicles'=>$vehicles]);
+        $drivers = Driver::all();
+        $vehicles = Vehicle::all();
+
+        return view('refuels.create', ['pageTitle' => $pageTitle, 'drivers' => $drivers, 'vehicles' => $vehicles]);
     }
 
     /**
@@ -46,7 +48,27 @@ class RefuelsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $vehicleID = $request->input('driver_id');
+        $validator = Validator::make($request->all(), [
+            'refuel_amount' => [
+                'required',
+                Rule::exists('vehicles', 'tank')->where(function ($query) {
+                    return $query->where('id', 5);
+                }),
+            ],
+        ]);
+
+        $price = $request->input('price');
+        $refuel = Refuel::create([
+            'driver_id' => $request->input('driver_id'),
+            'vehicle_id' => $request->input('vehicle_id'),
+            'type_fuel' => $request->input('type_fuel'),
+            'date' => $request->input('date'),
+            'price' => $price,
+            'refuel_amount' => $request->input('refuel_amount'),
+        ]);
+
+        return redirect('/vehicles');
     }
 
     /**
@@ -68,7 +90,18 @@ class RefuelsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $pageTitle = "Abastecimentos";
+
+        $drivers = Driver::all();
+        $vehicles = Vehicle::all();
+
+        $refuel = Refuel::where('id', $id)->first();
+
+        return view('refuels.edit', [
+            'pageTitle' => $pageTitle, 'drivers' => $drivers,
+            'vehicles' => $vehicles,
+            'refuel' => $refuel
+        ]);
     }
 
     /**
@@ -80,7 +113,18 @@ class RefuelsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        $refuel = Refuel::where('id', $id)
+            ->update([
+                'driver_id' => $request->input('driver_id'),
+                'vehicle_id' => $request->input('vehicle_id'),
+                'type_fuel' => $request->input('type_fuel'),
+                'date' => $request->input('date'),
+                'price' => $request->input('price'),
+                'refuel_amount' => $request->input('refuel_amount'),
+            ]);
+
+        return redirect('/refuels');
     }
 
     /**
@@ -91,6 +135,10 @@ class RefuelsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $refuel = Refuel::where('id', $id)->first();
+
+        $refuel->delete();
+
+        return redirect('/refuels');
     }
 }

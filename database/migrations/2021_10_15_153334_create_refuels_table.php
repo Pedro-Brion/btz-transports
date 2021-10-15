@@ -20,6 +20,7 @@ class CreateRefuelsTable extends Migration
             $table->date('date');
             $table->string('type_fuel');
             $table->tinyInteger('refuel_amount');
+            $table->string('price');
             $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
             $table->foreign('driver_id')->references('id')->on('drivers')->onDelete('cascade');
 

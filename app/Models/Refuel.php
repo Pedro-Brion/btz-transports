@@ -11,7 +11,17 @@ class Refuel extends Model
 
     protected $dates = ['date'];
 
-    protected $fillable=[];
+    protected $fillable = [
+        'id',
+        'vehicle_id',
+        'driver_id',
+        'date',
+        'type_fuel',
+        'refuel_amount',
+        'vehicle_id',
+        'driver_id',
+        'price'
+    ];
 
     public function driver()
     {
@@ -23,16 +33,17 @@ class Refuel extends Model
         return $this->belongsTo(Vehicle::class);
     }
 
-    public function setPriceAtribute($value){
-        $fuel="Gasolina";
-        $amount=10;
-        if ($fuel ==="Gasolina")
-            $amount*= 4.29;
-        if ($fuel ==="Etanol")
-            $amount*= 2.99;
-        if ($fuel ==="Diesel")
-            $amount*= 2.09;
+    public function setPriceAtribute($value)
+    {
+        $fuel = "Gasolina";
+        $amount = 10;
+        if ($fuel === "Gasolina")
+            $amount *= 4.29;
+        if ($fuel === "Etanol")
+            $amount *= 2.99;
+        if ($fuel === "Diesel")
+            $amount *= 2.09;
 
-        $this->attributes['price']=$amount;
+        $this->attributes['price'] = $amount;
     }
 }

@@ -4,86 +4,96 @@
 
     <div class="w-100">
         <div class="container d-flex justify-content-between my-3 p-1">
-            <h2>Editar motorista:</h2>
+            <h2>Adicionar novo motorista:</h2>
         </div>
-        <form action="/drivers/{{$driver->id}}" method="POST">
+        <form action="/refuels/{{$refuel->id}}" method="POST">
             @csrf
             @method('PUT')
             <div class="row mb-3">
                 <div class="col">
-                    <label class="form-label">Nome:</label>
-                    <input
-                        required
-                        type="text"
-                        class="form-control"
-                        name="name"
-                        value="{{$driver->name}}"
-                    >
+                    <label class="form-label">Motorista:</label>
+                        <select required class="form-select align-self-center" name="driver_id">
+                            @foreach ($drivers as $driver)
+                            <option {{$refuel->driver['name'] == $driver->name ? "selected" :''}} value="{{$driver->id}}">{{$driver->name}}</option>
+                            @endforeach
+                    </select>
                 </div>
                 <div class="col">
-                    <label class="form-label">CPF:</label>
-                    <input
-                        required
-                        type="text"
-                        class="form-control"
-                        name="cpf"
-                        value="{{$driver->cpf}}"
-                    >
+                    <label class="form-label">Veículo:</label>
+                    <select required class="form-select align-self-center" name="vehicle_id">
+                        @foreach ($vehicles as $vehicle)
+                        <option {{$refuel->vehicle['name'] == $vehicle->name ? "selected" :''}} value="{{$vehicle->id}}">{{$vehicle->name}}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
             <div class="row mb-3 d-flex">
                 <div class="col">
-                    <label class="form-label">CNH:</label>
-                    <input
-                        required
-                        type="text"
-                        class="form-control"
-                        name="cnh"
-                        value="{{$driver->cnh}}"
-                    >
-                </div>
-                <div class="col">
-                    <label class="form-label">Categoria:</label>
-                    <select
-                        required
-                        class="form-select align-self-center"
-                        name="cat_cnh"
-                        value="{{$driver->cat_cnh}}"
-                    >
-                        <option selected value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
-                        <option value="D">D</option>
-                        <option value="E">E</option>
-                      </select>
-                </div>
-                <div class="col">
-                    <label class="form-label">Data de Nascimento:</label>
+                    <label class="form-label">Data:</label>
                     <input
                         required
                         type="date"
                         class="form-control"
                         max="2021-01-01"
-                        name="birth"
-                        value="{{$driver->birth}}"
-                    >
-                </div>
-                <div class="row mt-3">
-                    <div class="form-check  text-center">
-                        <input
-                            name="active"
-                            class="form-check-input"
-                            type="checkbox"
-                            {{$driver->active ? 'checked="checked"' : ''}}
+                        name="date"
+                        value="{{$refuel->date}}"
                         >
-                        <label class="form-check-label">
-                            Ativo
-                        </label>
-                    </div>
+                </div>
+                <div class="col">
+                    <label class="form-label">Combustível:</label>
+                    <select required class="form-select align-self-center" name="type_fuel" id="fuel">
+                        <option
+                            {{$refuel->type_fuel =="Gasolina" ? "selected" :''}} value="Gasolina">Gasolina</option>
+                            <option
+                            {{$refuel->type_fuel =="Etanol" ? "selected" :''}} value="Etanol">Etanol</option>
+                            <option
+                            {{$refuel->type_fuel =="Diesel" ? "selected" :''}} value="Diesel">Diesel</option>
+                      </select>
+                </div>
+                <div class="col">
+                    <label class="form-label">Valor Abastecido:</label>
+                    <input required type="number" class="form-control" min="0" max="200" step=".1" name="refuel_amount"
+                    value="{{$refuel->refuel_amount}}" id="value"/>
+                </div>
+                <div class="col">
+                    <label class="form-label">Preço:</label>
+                    <input readonly type="text" class="form-control"
+                     name="price"
+                     id="price"
+                     value="{{$refuel->price}}" />
                 </div>
             </div>
             <button type="submit" class="btn btn-primary mt-2">Submit</button>
         </form>
     </div>
+
+    <script>
+        const fuel= document.querySelector("#fuel");
+        const value= document.querySelector("#value");
+        const price= document.querySelector("#price");
+
+        fuel.addEventListener('change', (e)=>{
+            if (value.value){
+                if(fuel.value ==="Gasolina")
+                    price.value="R$" + value.value*4.29;
+                if(fuel.value ==="Etanol")
+                    price.value="R$"+ value.value*2.99;
+                if(fuel.value ==="Diesel")
+                    price.value= "R$"+value.value*2.09;
+            }
+        })
+        value.addEventListener('change', (e)=>{
+
+                if(fuel.value ==="Gasolina")
+                    price.value="R$" + value.value*4.29;
+                if(fuel.value ==="Etanol")
+                    price.value="R$"+ value.value*2.99;
+                if(fuel.value ==="Diesel")
+                    price.value= "R$"+value.value*2.09;
+
+        })
+
+
+    </script>
 
 @endsection

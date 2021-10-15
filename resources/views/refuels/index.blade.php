@@ -33,7 +33,7 @@
                     </div>
                     <div class="mx-2 px-2 text-center">
                         <h4>Valor:</h4>
-                        <p>{{200}}R$<p>
+                        <p>{{$refuel->price}}<p>
                     </div>
                 </div>
             </div>

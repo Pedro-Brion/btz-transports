@@ -13,17 +13,18 @@ use Illuminate\Support\Facades\Auth;
 
 //ROUTES
 
+Route::get('/', function(){
+    return redirect('/login');
+});
 
 ////Login
-Route::get('/', [PagesController::class, 'login']);
-
-////Home
-Route::get('/home', [PagesController::class, 'index'])->name("home");
+Auth::routes();
 
 ////Drivers
 Route::resource('/drivers', DriversController::class);
 
 ////Users
+Route::get('home', [PagesController::class,'index']);
 
 ////Refuels
 Route::resource('/refuels', RefuelsController::class);
