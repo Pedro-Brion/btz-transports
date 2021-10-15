@@ -7,25 +7,26 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\DriversController;
-use App\Http\Controllers\RefuelController;
-use App\Http\Controllers\VehicleController;
+use App\Http\Controllers\RefuelsController;
+use App\Http\Controllers\VehiclesController;
+use Illuminate\Support\Facades\Auth;
 
 //ROUTES
+
+
 ////Login
-Route::get('/', [PagesController::class, 'login'])->name("login");
+Route::get('/', [PagesController::class, 'login']);
 
 ////Home
 Route::get('/home', [PagesController::class, 'index'])->name("home");
 
 ////Drivers
-Route::get('/drivers', [DriversController::class, 'index'])->name("drivers");
+Route::resource('/drivers', DriversController::class);
 
 ////Users
-Route::get('/users', [UsersController::class, 'index'])->name("users");
-Route::get('/users/{id}', [UsersController::class, 'show'])->whereNumber('id');
 
 ////Refuels
-Route::get('/refuels', [RefuelController::class, 'index'])->name('refuels');
+Route::resource('/refuels', RefuelsController::class);
 
 ////Vehicles
-Route::get('/vehicles', [VehicleController::class, 'index'])->name("vehicles");
+Route::resource('/vehicles', VehiclesController::class);

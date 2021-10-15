@@ -13,6 +13,6 @@ class PagesController extends Controller
     public function index()
     {
         $pageTitle = "BTZ Transports";
-        return view('home', ['pageTitle' => $pageTitle]);
+        return view('home2', ['pageTitle' => $pageTitle]);
     }
 }

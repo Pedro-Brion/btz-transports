@@ -5,17 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Driver extends Model
+class Vehicle extends Model
 {
     use HasFactory;
 
-    protected $dateFormat = 'd/m/y';
+    protected $dates = ['year'];
 
-    protected $casts =[
-        'active'=>'boolean'
-    ];
-
-    protected $fillable=['name','cpf','cnh','cat_cnh','birth','active'];
+    protected $fillable=['name','placa','type_fuel','brand','year','tank','observation'];
 
     public function refuel()
     {
