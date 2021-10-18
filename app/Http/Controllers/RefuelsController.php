@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Driver;
 use App\Models\Refuel;
 use App\Models\Vehicle;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -48,16 +49,20 @@ class RefuelsController extends Controller
      */
     public function store(Request $request)
     {
-        $vehicleID = $request->input('driver_id');
-        $validator = Validator::make($request->all(), [
-            'refuel_amount' => [
-                'required',
-                Rule::exists('vehicles', 'tank')->where(function ($query) {
-                    return $query->where('id', 5);
-                }),
-            ],
-        ]);
+        //Valida se o tank suporta abastecimento
+        $vehicleID = $request->input('vehicle_id');
 
+        $vehicle = Vehicle::where('id', $vehicleID)->first();
+
+        if ($request->input('type_fuel') !== $vehicle->type_fuel) {
+            return redirect('refuels/create')->with('errorType', 'Carro não suporta tal combustível')->withInput();
+        }
+        if ($request->input('refuel_amount') > $vehicle->tank) {
+            return redirect('refuels/create')->with('errorTank', 'Valor maior que a capacidade do tank')->withInput();
+        }
+
+
+        //Guarda no banco
         $price = $request->input('price');
         $refuel = Refuel::create([
             'driver_id' => $request->input('driver_id'),
@@ -68,7 +73,7 @@ class RefuelsController extends Controller
             'refuel_amount' => $request->input('refuel_amount'),
         ]);
 
-        return redirect('/vehicles');
+        return redirect('/refuels');
     }
 
     /**
@@ -100,7 +105,7 @@ class RefuelsController extends Controller
         return view('refuels.edit', [
             'pageTitle' => $pageTitle, 'drivers' => $drivers,
             'vehicles' => $vehicles,
-            'refuel' => $refuel
+            'refuel' => $refuel,
         ]);
     }
 
@@ -113,6 +118,18 @@ class RefuelsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $editRoute = "refuels/" . $id . "/edit/";
+        $vehicleID = $request->input('vehicle_id');
+
+        $vehicle = Vehicle::where('id', $vehicleID)->first();
+
+
+        if ($request->input('type_fuel') !== $vehicle->type_fuel) {
+            return redirect('refuels/create')->with('errorType', 'Carro não suporta tal combustível')->withInput();
+        }
+        if ($request->input('refuel_amount') > $vehicle->tank) {
+            return redirect('refuels/create')->with('errorTank', 'Valor maior que a capacidade do tank')->withInput();
+        }
 
         $refuel = Refuel::where('id', $id)
             ->update([

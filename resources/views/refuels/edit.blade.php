@@ -49,18 +49,37 @@
                             <option
                             {{$refuel->type_fuel =="Diesel" ? "selected" :''}} value="Diesel">Diesel</option>
                       </select>
+                      @if(session('errorType'))
+                      <p style="color: red"> {{session('errorType')}}</p>
+
+                      @endif
                 </div>
                 <div class="col">
                     <label class="form-label">Valor Abastecido:</label>
-                    <input required type="number" class="form-control" min="0" max="200" step=".1" name="refuel_amount"
-                    value="{{$refuel->refuel_amount}}" id="value"/>
+                    <input
+                        required
+                        type="number"
+                        class="form-control"
+                        min="0" max="200" step=".1"
+                        name="refuel_amount"
+                        value="{{
+                        old('refuel_amount') !== null ? old('refuel_amount') : $refuel->refuel_amount;
+                        }}"
+                        id="value"
+                        />
+                    @if(session('errorTank'))
+                    <p style="color: red"> {{session('errorTank')}}</p>
+
+                    @endif
                 </div>
                 <div class="col">
                     <label class="form-label">Preço:</label>
                     <input readonly type="text" class="form-control"
                      name="price"
                      id="price"
-                     value="{{$refuel->price}}" />
+                     value="{{
+                        old('price') !== null ? old('price') : $refuel->price;
+                        }}"/>
                 </div>
             </div>
             <button type="submit" class="btn btn-primary mt-2">Submit</button>
@@ -75,25 +94,21 @@
         fuel.addEventListener('change', (e)=>{
             if (value.value){
                 if(fuel.value ==="Gasolina")
-                    price.value="R$" + value.value*4.29;
+                    price.value="R$" + (value.value*4.29).toFixed(2);
                 if(fuel.value ==="Etanol")
-                    price.value="R$"+ value.value*2.99;
+                    price.value="R$" + (value.value*2.99).toFixed(2);
                 if(fuel.value ==="Diesel")
-                    price.value= "R$"+value.value*2.09;
+                    price.value="R$" + (value.value*2.09).toFixed(2);
             }
         })
         value.addEventListener('change', (e)=>{
-
                 if(fuel.value ==="Gasolina")
-                    price.value="R$" + value.value*4.29;
+                    price.value="R$" + (value.value*4.29).toFixed(2);
                 if(fuel.value ==="Etanol")
-                    price.value="R$"+ value.value*2.99;
+                    price.value="R$" + (value.value*2.99).toFixed(2);
                 if(fuel.value ==="Diesel")
-                    price.value= "R$"+value.value*2.09;
-
+                    price.value="R$" + (value.value*2.09).toFixed(2);
         })
-
-
     </script>
 
 @endsection

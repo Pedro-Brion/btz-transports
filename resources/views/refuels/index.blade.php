@@ -21,7 +21,7 @@
                     </div>
                     <div class="mx-2 px-2 text-center">
                         <h4>Data:</h4>
-                        <p>{{$refuel->date->format('d/m/Y')}}<p>
+                        <p>{{$refuel->date}}<p>
                     </div>
                     <div class="mx-2 px-2 text-center">
                         <h4>Combustível:</h4>

@@ -9,7 +9,7 @@ class Refuel extends Model
 {
     use HasFactory;
 
-    protected $dates = ['date'];
+    protected $dateFormat = 'd/m/y';
 
     protected $fillable = [
         'id',
@@ -31,19 +31,5 @@ class Refuel extends Model
     public function vehicle()
     {
         return $this->belongsTo(Vehicle::class);
-    }
-
-    public function setPriceAtribute($value)
-    {
-        $fuel = "Gasolina";
-        $amount = 10;
-        if ($fuel === "Gasolina")
-            $amount *= 4.29;
-        if ($fuel === "Etanol")
-            $amount *= 2.99;
-        if ($fuel === "Diesel")
-            $amount *= 2.09;
-
-        $this->attributes['price'] = $amount;
     }
 }

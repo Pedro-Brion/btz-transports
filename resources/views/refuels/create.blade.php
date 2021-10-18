@@ -13,7 +13,7 @@
                     <label class="form-label">Motorista:</label>
                         <select required class="form-select align-self-center" name="driver_id">
                             @foreach ($drivers as $driver)
-                            <option selected value="{{$driver->id}}">{{$driver->name}}</option>
+                            <option {{old('driver_id') == $driver->id ? "selected" :''}} value="{{$driver->id}}">{{$driver->name}}</option>
                             @endforeach
                     </select>
                 </div>
@@ -21,7 +21,7 @@
                     <label class="form-label">Veículo:</label>
                     <select required class="form-select align-self-center" name="vehicle_id">
                         @foreach ($vehicles as $vehicle)
-                        <option selected value="{{$vehicle->id}}">{{$vehicle->name}}</option>
+                        <option {{old('vehicle_id') == $vehicle->id ? "selected" :''}} value="{{$vehicle->id}}">{{$vehicle->name}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -35,6 +35,7 @@
                         class="form-control"
                         max="2021-01-01"
                         name="date"
+                        value="{{old('date')}}"
                         >
                 </div>
                 <div class="col">
@@ -44,10 +45,27 @@
                         <option value="Etanol">Etanol</option>
                         <option value="Diesel">Diesel</option>
                       </select>
+                      @if(session('errorType'))
+                    <p style="color: red"> {{session('errorType')}}</p>
+
+                    @endif
                 </div>
                 <div class="col">
                     <label class="form-label">Valor Abastecido:</label>
-                    <input  id="value" required type="number" class="form-control" min="0" max="" step=".1" name="refuel_amount" />
+                    <input
+                        id="value"
+                        required
+                        type="number"
+                        class="form-control"
+                        min="0" max="200"
+                        step=".1"
+                        name="refuel_amount"
+                        value="{{old('refuel_amount')}}"
+                    />
+                    @if(session('errorTank'))
+                    <p style="color: red"> {{session('errorTank')}}</p>
+
+                    @endif
                 </div>
                 <div class="col">
                     <label class="form-label">Preço:</label>
@@ -57,7 +75,8 @@
                         class="form-control"
                         name="price"
                         id="price"
-                        />
+                        value="{{old('price')}}"
+                    />
                 </div>
             </div>
             <button type="submit" class="btn btn-primary mt-2">Submit</button>
@@ -73,25 +92,22 @@
         fuel.addEventListener('change', (e)=>{
             if (value.value){
                 if(fuel.value ==="Gasolina")
-                    price.value="R$" + value.value*4.29;
+                    price.value="R$" + (value.value*4.29).toFixed(2);
                 if(fuel.value ==="Etanol")
-                    price.value="R$"+ value.value*2.99;
+                    price.value="R$" + (value.value*2.99).toFixed(2);
                 if(fuel.value ==="Diesel")
-                    price.value= "R$"+value.value*2.09;
+                    price.value="R$" + (value.value*2.09).toFixed(2);
             }
         })
         value.addEventListener('change', (e)=>{
-
                 if(fuel.value ==="Gasolina")
-                    price.value="R$" + value.value*4.29;
+                    price.value="R$" + (value.value*4.29).toFixed(2);
                 if(fuel.value ==="Etanol")
-                    price.value="R$"+ value.value*2.99;
+                    price.value="R$" + (value.value*2.99).toFixed(2);
                 if(fuel.value ==="Diesel")
-                    price.value= "R$"+value.value*2.09;
-
+                    price.value="R$" + (value.value*2.09).toFixed(2);
         })
 
-        
     </script>
 
 @endsection
